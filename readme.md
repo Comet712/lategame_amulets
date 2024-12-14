@@ -19,4 +19,4 @@ Below Y = -4, there is a semi-rare chance to find a green block called "Megastru
 
 
 
-Code licensed under The MIT License (MIT). Textures licensed under CC-BY-SA 4.0
+Code licensed under the MIT License (MIT). Textures licensed under CC-BY-SA 4.0
