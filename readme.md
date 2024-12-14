@@ -13,7 +13,7 @@ How to get: Super Steel Amulet + Steel Amulet, OR combine 3 Steel Amulets.
 
 
 
-Below Y = -4, there is a semi-rare chance to find a green block called "Megastructure Ore". It is very easy to spot. It has an equal chance of spawning at any depth.
+Below Y = -4, there is a semi-rare chance to find a green block called "Megastructure Ore". It is very easy to spot. It has an equal chance of spawning at most depths.
 
 (Your strongest amulet for a specific material determines your drops for it. Simply have the amulet in your inventory to get the effect.)
 
