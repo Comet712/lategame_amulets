@@ -52,6 +52,17 @@ description = "Skyscraper Amulet",
 inventory_image = "steel_amulet_3.png",
 })
 
+core.register_craftitem("lategame_amulets:coal_amulet_1", {
+description = "Coal Amulet",
+inventory_image = "coal_amulet.png",
+})
+
+core.register_craftitem("lategame_amulets:coal_amulet_2", {
+description = "Super Coal Amulet",
+inventory_image = "coal_amulet_2.png",
+})
+
+
 
 
 --Crafting
@@ -108,6 +119,27 @@ core.register_craft({
         "lategame_amulets:steel_amulet",
     },
 })
+
+
+core.register_craft({
+	output = "lategame_amulets:coal_amulet_1",
+	recipe = {
+		{"default:coal_lump", "lategame_amulets:genesis_matter", "default:coal_lump"},
+		{"lategame_amulets:genesis_matter", "lategame_amulets:steel_amulet", "lategame_amulets:genesis_matter"},
+		{"default:coal_lump", "lategame_amulets:genesis_matter", "default:coal_lump"}
+	}
+})
+
+
+core.register_craft({
+    type = "shapeless",
+    output = "lategame_amulets:coal_amulet_2",
+    recipe = {
+        "lategame_amulets:coal_amulet_1",
+        "lategame_amulets:coal_amulet_1",
+    },
+})
+
 
 
 
@@ -206,10 +238,28 @@ function minetest.handle_node_drops(pos, drops, digger)
 				
 				else
 				
-				--Digger does not have an amulet, so pass back as-is
+					--Digger does not have an amulet, so pass back as-is
 					table.insert_all(final_drops, {stack})
 				
-				end		
+				end	
+			elseif stack:get_name() == ("default:coal_lump") then	
+			
+				--Handle coal amulets
+				if player_inventory:contains_item("main", "lategame_amulets:coal_amulet_2") then
+				
+					local new_steel_stack = ItemStack("default:coal_lump 9")
+					table.insert_all(final_drops, {new_steel_stack})
+					
+				elseif player_inventory:contains_item("main", "lategame_amulets:coal_amulet_1") then
+				
+					local new_steel_stack = ItemStack("default:coal_lump 3")
+					table.insert_all(final_drops, {new_steel_stack})
+					
+				else
+					--Digger does not have an amulet, so pass back as-is
+					table.insert_all(final_drops, {stack})
+				end
+			
 			else
 				--Not an affected item, so pass back as-is
 				table.insert_all(final_drops, {stack})		
