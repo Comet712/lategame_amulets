@@ -213,7 +213,6 @@ drop = {
         }
     },
 
-sounds = default.node_sound_stone_defaults(),
 })
 
 
@@ -261,7 +260,6 @@ drop = {
         }
     },
 
-sounds = default.node_sound_stone_defaults(),
 })
 
 
@@ -287,7 +285,6 @@ drop = {
         }
     },
 
-sounds = default.node_sound_stone_defaults(),
 })
 
 
@@ -305,7 +302,6 @@ drop = {
         }
     },
 
-sounds = default.node_sound_stone_defaults(),
 })
 
 
@@ -324,7 +320,6 @@ drop = {
         }
     },
 
-sounds = default.node_sound_stone_defaults(),
 })
 
 
