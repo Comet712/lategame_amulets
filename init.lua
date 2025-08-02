@@ -3,7 +3,7 @@
 
 The MIT License (MIT)
 
-Copyright (c) 2024 by Comet712
+Copyright (c) 2024-2025 by Comet712
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
@@ -509,6 +509,68 @@ local My_Path = minetest.get_modpath('lategame_amulets')
 
 
 
+
+--Exosphere Glass node
+
+minetest.register_node("lategame_amulets:exosphere_glass", {
+
+description = "Exosphere Glass",
+drawtype = "glasslike",
+tiles = {"default_obsidian_glass.png"},
+paramtype = "light",
+sunlight_propagates = true,
+is_ground_content = false,
+groups = {cracky = 2},
+drop = "",
+
+})
+
+
+
+--[[
+This next code section is modified from Wuzzy's code in "Indestructible Bedrock Layer"
+
+Copyright 2023 Wuzzy
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+--]]
+
+local Exosphere_Glass_Layer = 900
+
+
+minetest.register_on_generated(function(minp, maxp)
+	if maxp.y >= Exosphere_Glass_Layer and minp.y <= Exosphere_Glass_Layer then
+		local vm, emin, emax = minetest.get_mapgen_object("voxelmanip")
+		local data = vm:get_data()
+		local area = VoxelArea:new({MinEdge=emin, MaxEdge=emax})
+		
+		local c_exosphere_glass = minetest.get_content_id("lategame_amulets:exosphere_glass")
+
+		for x = minp.x, maxp.x do
+			for z = minp.z, maxp.z do
+				local p_pos = area:index(x, Exosphere_Glass_Layer, z)
+				data[p_pos] = c_exosphere_glass
+			end
+		end
+
+		vm:set_data(data)
+		vm:calc_lighting()
+		vm:update_liquids()
+		vm:write_to_map()
+	end
+end)
+
+
+
+
+
+
+
+
 --[[
 
 Compatible with Mobs Monster. This will change spawn rates and let monsters drop items for crafting amulets.
@@ -532,6 +594,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 --]]
 
 
+
 if minetest.get_modpath("mobs_monster") and minetest.get_modpath("mobs") then
 
 	if not mobs.custom_spawn_monster then
@@ -540,7 +603,7 @@ if minetest.get_modpath("mobs_monster") and minetest.get_modpath("mobs") then
 				name = "mobs_monster:mese_monster",
 				nodes = {"group:cracky", "group:crumbly", "group:oddly_breakable_by_hand", "group:choppy"},
 				max_light = 7,
-				chance = 500,
+				chance = 2500,
 				active_object_count = 20,
 			})
 			
@@ -548,7 +611,7 @@ if minetest.get_modpath("mobs_monster") and minetest.get_modpath("mobs") then
 			name = "mobs_monster:dungeon_master",
 			nodes = {"group:cracky", "group:crumbly", "group:oddly_breakable_by_hand", "group:choppy"},
 			max_light = 7,
-			chance = 1300,
+			chance = 6900,
 			active_object_count = 10,
 		})
 		
@@ -615,7 +678,6 @@ if minetest.get_modpath("mobs_monster") and minetest.get_modpath("mobs") then
 	end
 
 end
-
 
 
 
