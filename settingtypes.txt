@@ -1,0 +1,6 @@
+# How often monsters spawn
+enemy_difficulty (Difficulty, AKA enemy spawn rate) enum normal very_easy,easy,normal,hard,apocalyptic
+
+# Makes the game more alive. Enemies may spawn indoors too.
+# You should set Bones Mode to Keep so you keep items on death (Minetest settings).
+daytime_enemies_enabled (Allow enemies during day) bool false
