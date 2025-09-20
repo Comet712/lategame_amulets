@@ -23,6 +23,13 @@ https://creativecommons.org/licenses/by-sa/4.0/
 
 
 
+local daytime_enemies_enabled = minetest.settings:get("daytime_enemies_enabled")
+local enemy_difficulty = minetest.settings:get("enemy_difficulty")
+
+
+--Backwards compatibility
+core.register_alias('lategame_amulets:treasure_box_wheat_amulet', 'lategame_amulets:treasure_box_cotton_amulet')
+
 
 --Items
 
@@ -79,9 +86,71 @@ inventory_image = "coal_amulet_2.png",
 
 
 
+core.register_craftitem("lategame_amulets:cotton_amulet_1", {
+description = "Cotton Amulet Tier 1",
+inventory_image = "coal_amulet.png",
+})
+
+core.register_craftitem("lategame_amulets:cotton_amulet_2", {
+description = "Cotton Amulet Tier 2",
+inventory_image = "coal_amulet.png",
+})
+
+
+core.register_craftitem("lategame_amulets:cotton_amulet_3", {
+description = "Cotton Amulet Tier 3",
+inventory_image = "coal_amulet.png",
+})
+
+
+core.register_craftitem("lategame_amulets:cotton_amulet_4", {
+description = "Cotton Amulet Tier 4",
+inventory_image = "coal_amulet.png",
+})
+
+
+
+
+
+
+
+
+if minetest.get_modpath("3d_armor") then
+
+armor:register_armor("lategame_amulets:glass_boots", {
+
+description = "Glass Boots",
+inventory_image = "lategame_amulets_inv_glass_boots.png",
+
+groups = {armor_feet=1, physics_speed=1,
+				physics_jump=0.5, armor_use=25000},
+				
+})
+
+end
+
 
 --Crafting
 
+core.register_craft({
+	output = "lategame_amulets:glass_boots",
+	recipe = {
+		{"", "", ""},
+		{"default:glass", "", "default:glass"},
+		{"default:glass", "", "default:glass"}
+	}
+})
+
+if minetest.get_modpath("everness") then
+core.register_craft({
+	output = "lategame_amulets:glass_boots",
+	recipe = {
+		{"", "", ""},
+		{"everness:glass", "", "everness:glass"},
+		{"everness:glass", "", "everness:glass"}
+	}
+})
+end
 
 core.register_craft({
 	output = "lategame_amulets:genesis_matter",
@@ -161,6 +230,9 @@ core.register_craft({
 })
 
 
+
+
+
 core.register_craft({
 	output = "lategame_amulets:coal_amulet_1",
 	recipe = {
@@ -177,6 +249,37 @@ core.register_craft({
     recipe = {
         "lategame_amulets:coal_amulet_1",
         "lategame_amulets:coal_amulet_1",
+    },
+})
+
+
+
+
+
+core.register_craft({
+    type = "shapeless",
+    output = "lategame_amulets:cotton_amulet_2",
+    recipe = {
+    	"lategame_amulets:cotton_amulet_1",
+    	"lategame_amulets:cotton_amulet_1",
+    },
+})
+
+core.register_craft({
+    type = "shapeless",
+    output = "lategame_amulets:cotton_amulet_3",
+    recipe = {
+    	"lategame_amulets:cotton_amulet_2",
+    	"lategame_amulets:cotton_amulet_1",
+    },
+})
+
+core.register_craft({
+    type = "shapeless",
+    output = "lategame_amulets:cotton_amulet_4",
+    recipe = {
+    	"lategame_amulets:cotton_amulet_3",
+    	"lategame_amulets:cotton_amulet_1",
     },
 })
 
@@ -233,9 +336,93 @@ y_max = -4,
 
 
 
+
+
+
+--Reward boxes
+
+
+core.register_node("lategame_amulets:treasure_box_1", {
+description = "Treasure Box Tier 1",
+tiles = {"Treasure_Box.png"},
+is_ground_content=true,
+groups = {cracky = 2},
+
+drop = {
+        --max_items = 4,
+        items = {
+            {
+                items = {'lategame_amulets:megastructure_ore'},
+            },
+            {
+                items = {'lategame_amulets:type_II_artifact 3'},
+                rarity = 3,
+            }
+            
+        }
+    },
+
+})
+
+
+
+core.register_node("lategame_amulets:treasure_box_2", {
+description = "Treasure Box Tier 2",
+tiles = {"Treasure_Box.png"},
+is_ground_content=true,
+groups = {cracky = 2},
+
+drop = {
+        --max_items = 4,
+        items = {
+            {
+                items = {'lategame_amulets:megastructure_ore'},
+            },
+            {
+                items = {'lategame_amulets:type_II_artifact 3'},
+                rarity = 3,
+            }
+            
+        }
+    },
+
+})
+
+
+
+
+
+core.register_node("lategame_amulets:treasure_box_cotton_amulet", {
+description = "Treasure Box Cotton Amulet",
+tiles = {"Treasure_Box.png"},
+is_ground_content=true,
+groups = {cracky = 2},
+
+drop = {
+        --max_items = 4,
+        items = {
+            {
+                items = {'lategame_amulets:cotton_amulet_1'},
+            },
+            {
+                items = {'lategame_amulets:megastructure_ore 5'},
+            },
+            {
+                items = {'default:ladder_wood 10'},
+            }
+            
+        }
+    },
+
+})
+
+
+
+
+
 core.register_node("lategame_amulets:sky_ore", {
 description = "Sky Ore",
-tiles = {"lategame_amulets_megastructure_ore.png"},
+tiles = {"sky_ore.png"},
 is_ground_content=false,
 groups = {cracky = 2},
 
@@ -245,17 +432,6 @@ drop = {
             {
                 items = {'lategame_amulets:sky_artifact'},
                 rarity = 3,
-            },
-            {
-                items = {'lategame_amulets:sky_artifact'},
-                rarity = 2,
-            },
-            {
-                items = {'lategame_amulets:sky_artifact'},
-                rarity = 2,
-            },
-            {
-                items = {'lategame_amulets:sky_artifact','lategame_amulets:type_II_artifact'},
             }
         }
     },
@@ -346,7 +522,7 @@ clust_scarcity = 4*4*4,
 clust_num_ores = 1,
 clust_size = 4,
 y_min = 100,
-y_max = 31000,
+y_max = 850,
 })
 
 
@@ -452,6 +628,39 @@ function minetest.handle_node_drops(pos, drops, digger)
 					table.insert_all(final_drops, {stack})
 				end
 			
+			elseif stack:get_name() == ("farming:cotton") then	
+			
+				--Handle cotton amulets
+
+				if player_inventory:contains_item("main", "lategame_amulets:cotton_amulet_4") then
+				
+					local new_steel_stack = ItemStack("wool:white 33")
+					table.insert_all(final_drops, {new_steel_stack})
+
+				elseif player_inventory:contains_item("main", "lategame_amulets:cotton_amulet_3") then
+				
+					local new_steel_stack = ItemStack("wool:white 12")
+					table.insert_all(final_drops, {new_steel_stack})
+
+				elseif player_inventory:contains_item("main", "lategame_amulets:cotton_amulet_2") then
+				
+					local new_steel_stack = ItemStack("wool:white 4")
+					table.insert_all(final_drops, {new_steel_stack})
+				
+					
+				elseif player_inventory:contains_item("main", "lategame_amulets:cotton_amulet_1") then
+				
+					local new_steel_stack = ItemStack("wool:white 1")
+					table.insert_all(final_drops, {new_steel_stack})
+					
+				
+				
+				else
+					--Player does not have an amulet, so pass back as-is
+					table.insert_all(final_drops, {stack})
+				end
+
+
 			else
 				--Not an affected item, so pass back as-is
 				table.insert_all(final_drops, {stack})		
@@ -502,7 +711,9 @@ core.register_craft({
 
 
 
+
 local My_Path = minetest.get_modpath('lategame_amulets')
+dofile(My_Path .. "/schematics.lua")
 
 
 
@@ -524,6 +735,101 @@ groups = {cracky = 2},
 drop = "",
 
 })
+
+
+
+
+if minetest.get_modpath("ethereal") then
+
+--Set to 20 second flight
+
+core.register_craft({
+	output = "ethereal:flight_potion",
+	recipe = {
+		{"lategame_amulets:sky_artifact", "lategame_amulets:sky_artifact", "lategame_amulets:sky_artifact"},
+		{"lategame_amulets:sky_artifact", "lategame_amulets:sky_artifact", "lategame_amulets:sky_artifact"},
+		{"lategame_amulets:sky_artifact", "lategame_amulets:sky_artifact", "lategame_amulets:sky_artifact"}
+	}
+})
+
+
+--TODO, Allow Ethereal biomes to extend into the Floatlands
+--Include smaller structures and decorations for trees and stuff
+
+
+
+end
+
+
+
+
+
+
+
+
+
+
+
+--Enemy values
+
+
+
+local mese_monster_spawn_chance = 1500
+local dungeon_master_spawn_chance = 3900
+
+local mese_monster_max_count = 20
+local dungeon_master_max_count = 10
+
+
+	if enemy_difficulty == "apocalyptic" then
+
+		mese_monster_spawn_chance = 1500
+		dungeon_master_spawn_chance = 3900
+		mese_monster_max_count = 20
+		dungeon_master_max_count = 8
+		
+	elseif enemy_difficulty == "hard" then
+
+		mese_monster_spawn_chance = 3000
+		dungeon_master_spawn_chance = 10000
+		mese_monster_max_count = 16
+		dungeon_master_max_count = 3
+
+	elseif enemy_difficulty == "normal" then
+
+		mese_monster_spawn_chance = 7000
+		dungeon_master_spawn_chance = 25000
+		mese_monster_max_count = 7
+		dungeon_master_max_count = 1
+		
+
+	elseif enemy_difficulty == "easy" then
+
+		mese_monster_spawn_chance = 7000
+		dungeon_master_spawn_chance = 25000
+		mese_monster_max_count = 4
+		dungeon_master_max_count = 0
+
+	elseif enemy_difficulty == "very_easy" then
+
+		mese_monster_spawn_chance = 7000
+		dungeon_master_spawn_chance = 25000
+		mese_monster_max_count = 4
+		dungeon_master_max_count = 0
+	end
+
+
+
+
+enemy_max_light_spawning = 7
+
+if(daytime_enemies_enabled) then
+enemy_max_light_spawning = 15
+end
+
+
+
+
 
 
 
@@ -571,6 +877,7 @@ end)
 
 
 
+
 --[[
 
 Compatible with Mobs Monster. This will change spawn rates and let monsters drop items for crafting amulets.
@@ -602,17 +909,17 @@ if minetest.get_modpath("mobs_monster") and minetest.get_modpath("mobs") then
 		mobs:spawn({
 				name = "mobs_monster:mese_monster",
 				nodes = {"group:cracky", "group:crumbly", "group:oddly_breakable_by_hand", "group:choppy"},
-				max_light = 7,
-				chance = 2500,
-				active_object_count = 20,
+				max_light = enemy_max_light_spawning,
+				chance = mese_monster_spawn_chance,
+				active_object_count = mese_monster_max_count,
 			})
 			
 		mobs:spawn({
 			name = "mobs_monster:dungeon_master",
 			nodes = {"group:cracky", "group:crumbly", "group:oddly_breakable_by_hand", "group:choppy"},
-			max_light = 7,
-			chance = 6900,
-			active_object_count = 10,
+			max_light = enemy_max_light_spawning,
+			chance = dungeon_master_spawn_chance,
+			active_object_count = dungeon_master_max_count,
 		})
 		
 		
