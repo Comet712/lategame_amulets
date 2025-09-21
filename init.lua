@@ -49,41 +49,63 @@ inventory_image = "genesis_matter.png",
 })
 
 
+core.register_craftitem("lategame_amulets:rare_crystal", {
+description = "Rare Crystal",
+inventory_image = "Type2_Sky.png",
+})
+
+
+
 core.register_craftitem("lategame_amulets:steel_amulet", {
-description = "Steel Amulet",
+description = "Steel Amulet Tier 1",
 inventory_image = "steel_amulet.png",
 })
 
 core.register_craftitem("lategame_amulets:steel_amulet_2", {
-description = "Super Steel Amulet",
+description = "Steel Amulet Tier 2",
 inventory_image = "steel_amulet_2.png",
 })
 
 core.register_craftitem("lategame_amulets:steel_amulet_3", {
-description = "Skyscraper Amulet",
+description = "Steel Amulet Tier 3",
 inventory_image = "steel_amulet_3.png",
 })
 
 core.register_craftitem("lategame_amulets:steel_amulet_4", {
-description = "Skyscraper Amulet Tier 4",
+description = "Steel Amulet Tier 4",
 inventory_image = "steel_amulet_3.png",
 })
 
 core.register_craftitem("lategame_amulets:steel_amulet_5", {
-description = "Skyscraper Amulet Tier 5",
+description = "Steel Amulet Tier 5",
 inventory_image = "steel_amulet_3.png",
 })
 
 core.register_craftitem("lategame_amulets:coal_amulet_1", {
-description = "Coal Amulet",
+description = "Coal Amulet Tier 1",
 inventory_image = "coal_amulet.png",
 })
 
 core.register_craftitem("lategame_amulets:coal_amulet_2", {
-description = "Super Coal Amulet",
+description = "Coal Amulet Tier 2",
 inventory_image = "coal_amulet_2.png",
 })
 
+
+core.register_craftitem("lategame_amulets:apple_amulet_1", {
+description = "Apple Amulet Tier 1",
+inventory_image = "coal_amulet.png",
+})
+
+core.register_craftitem("lategame_amulets:apple_amulet_2", {
+description = "Apple Amulet Tier 2",
+inventory_image = "coal_amulet.png",
+})
+
+core.register_craftitem("lategame_amulets:apple_amulet_3", {
+description = "Apple Amulet Tier 2",
+inventory_image = "coal_amulet.png",
+})
 
 
 core.register_craftitem("lategame_amulets:cotton_amulet_1", {
@@ -127,10 +149,6 @@ groups = {armor_feet=1, physics_speed=1,
 				
 })
 
-end
-
-
---Crafting
 
 core.register_craft({
 	output = "lategame_amulets:glass_boots",
@@ -140,6 +158,24 @@ core.register_craft({
 		{"default:glass", "", "default:glass"}
 	}
 })
+
+
+core.register_craft({
+	output = "3d_armor:boots_crystal",
+	recipe = {
+		{"", "", ""},
+		{"lategame_amulets:rare_crystal", "", "lategame_amulets:rare_crystal"},
+		{"lategame_amulets:rare_crystal", "", "lategame_amulets:rare_crystal"}
+	}
+})
+
+
+
+end
+
+
+--Crafting
+
 
 if minetest.get_modpath("everness") then
 core.register_craft({
@@ -160,6 +196,40 @@ core.register_craft({
 		{"lategame_amulets:type_II_artifact", "lategame_amulets:type_II_artifact", "lategame_amulets:type_II_artifact"}
 	}
 })
+
+
+
+
+
+
+
+
+
+
+core.register_craft({
+    type = "shapeless",
+    output = "lategame_amulets:apple_amulet_2",
+    recipe = {
+        "lategame_amulets:apple_amulet_1",
+        "lategame_amulets:apple_amulet_1",
+    },
+})
+
+
+
+
+core.register_craft({
+    type = "shapeless",
+    output = "lategame_amulets:apple_amulet_3",
+    recipe = {
+        "lategame_amulets:apple_amulet_2",
+        "lategame_amulets:apple_amulet_1",
+    },
+})
+
+
+
+
 
 
 core.register_craft({
@@ -357,7 +427,16 @@ drop = {
             {
                 items = {'lategame_amulets:type_II_artifact 3'},
                 rarity = 3,
-            }
+            },
+			{
+                items = {'lategame_amulets:rare_crystal'},
+                rarity = 4,
+            },
+			{
+			
+				 items = {'lategame_amulets:apple_amulet_1'},
+                rarity = 4,
+			}
             
         }
     },
@@ -381,6 +460,9 @@ drop = {
             {
                 items = {'lategame_amulets:type_II_artifact 3'},
                 rarity = 3,
+            },
+			{
+                items = {'lategame_amulets:rare_crystal'},
             }
             
         }
@@ -431,7 +513,6 @@ drop = {
         items = {
             {
                 items = {'lategame_amulets:sky_artifact'},
-                rarity = 3,
             }
         }
     },
@@ -473,7 +554,7 @@ groups = {cracky = 2},
 drop = {
         items = {
             {
-                items = {'carts:powerrail 49','default:coal_lump 20','lategame_amulets:type_II_artifact 5'},
+                items = {'carts:powerrail 49','default:coal_lump 20'},
             },
         }
     },
@@ -491,7 +572,7 @@ groups = {cracky = 2},
 drop = {
         items = {
             {
-                items = {'tnt:tnt 20','default:diamond 15','lategame_amulets:type_II_artifact 18'},
+                items = {'tnt:tnt 20','default:diamond 3'},
             },
         }
     },
@@ -621,6 +702,29 @@ function minetest.handle_node_drops(pos, drops, digger)
 				elseif player_inventory:contains_item("main", "lategame_amulets:coal_amulet_1") then
 				
 					local new_steel_stack = ItemStack("default:coal_lump 3")
+					table.insert_all(final_drops, {new_steel_stack})
+					
+				else
+					--Digger does not have an amulet, so pass back as-is
+					table.insert_all(final_drops, {stack})
+				end
+			
+			elseif stack:get_name() == ("default:apple") then	
+			
+				--Handle apple amulets
+				if player_inventory:contains_item("main", "lategame_amulets:apple_amulet_3") then
+				
+					local new_steel_stack = ItemStack("default:apple 8")
+					table.insert_all(final_drops, {new_steel_stack})
+					
+				elseif player_inventory:contains_item("main", "lategame_amulets:apple_amulet_2") then
+				
+					local new_steel_stack = ItemStack("default:apple 4")
+					table.insert_all(final_drops, {new_steel_stack})
+				
+				elseif player_inventory:contains_item("main", "lategame_amulets:apple_amulet_1") then
+				
+					local new_steel_stack = ItemStack("default:apple 2")
 					table.insert_all(final_drops, {new_steel_stack})
 					
 				else
@@ -763,6 +867,78 @@ end
 
 
 
+
+
+--Break glass boots underground
+
+
+function Break_Glass_Boots_Repeating()
+
+Log_Timer = 0
+	
+core.register_globalstep(function(dtime)
+	
+	Log_Timer = Log_Timer + dtime
+	
+	if Log_Timer > 5 then
+	
+	    Log_Timer = 0
+		Check_Players_Underground_To_Break_Glass_Boots();
+		
+end
+end)
+	
+end
+
+
+		--If player is underground, break glass boots.
+
+function Check_Players_Underground_To_Break_Glass_Boots()
+
+All_Players = minetest.get_connected_players()
+
+for k, Player in ipairs(All_Players) do
+
+
+			Player_Position = Player:get_pos()
+
+			if Player_Position.y < -10  then
+			
+			
+			--[[
+				--Player_Inventory = Player:get_inventory()
+				
+				Player_Armor_Inventory = core.get_inventory({type="detached", name=Player:get_player_name().."_armor"})
+				
+				Num_Removed_Glass_Boots = Player_Armor_Inventory:remove_item("armor", ItemStack("lategame_amulets:glass_boots 1"))
+				
+				if Num_Removed_Glass_Boots:get_count() > 0 then
+						 core.chat_send_player(Player:get_player_name(), "In the absence of surface air, your glass boots shattered.")
+						 
+						 Num_Removed_Glass_Boots:add_wear(1000000)
+						 Player_Armor_Inventory:add_item("armor", Num_Removed_Glass_Boots)
+						 --Set player speed to normal
+				end
+--]]
+			
+
+			
+			end
+			
+			--Player_Inventory:contains_item("main", "lategame_amulets:glass_boots") and
+
+
+            
+			
+			
+        end
+
+end
+
+
+
+
+Break_Glass_Boots_Repeating()
 
 
 
