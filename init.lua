@@ -103,7 +103,7 @@ inventory_image = "coal_amulet.png",
 })
 
 core.register_craftitem("lategame_amulets:apple_amulet_3", {
-description = "Apple Amulet Tier 2",
+description = "Apple Amulet Tier 3",
 inventory_image = "coal_amulet.png",
 })
 
@@ -130,6 +130,175 @@ description = "Cotton Amulet Tier 4",
 inventory_image = "coal_amulet.png",
 })
 
+
+
+core.register_craftitem("lategame_amulets:diamond_stick", {
+description = "Polished Diamond Stick",
+inventory_image = "coal_amulet.png",
+})
+
+
+
+
+
+--Tools and armor
+
+
+minetest.register_tool("lategame_amulets:hammer_of_yeeting_1", {
+	description = "Hammer of Yeeting",
+	inventory_image = "coal_amulet.png",
+	wield_image = "coal_amulet.png",
+	
+	liquids_pointable = true,
+	stack_max = 1,
+	
+	tool_capabilities = {
+			full_punch_interval = 1.5,
+			damage_groups = {fleshy = 2, knockback = 50},
+			},
+
+})
+
+
+minetest.register_tool("lategame_amulets:bog_staff_1", {
+	description = "Bog Staff: Chaser Slayer",
+	inventory_image = "genesis_matter.png",
+	wield_image = "genesis_matter.png",
+	
+	liquids_pointable = true,
+	stack_max = 1,
+	
+		tool_capabilities = {
+			punch_interval = 5,
+			damage_groups = {fleshy = 1, knockback = 3},
+			},
+			
+			
+
+	
+	
+	on_use = function(itemstack, user, pointed_thing)
+		if pointed_thing.type == "node" then
+		
+			Position_Below_Click = pointed_thing.under
+
+
+		if core.is_protected(Position_Below_Click, user:get_player_name()) then
+			return
+		end
+
+			Node_To_Change_Position = {x = Position_Below_Click.x, y = Position_Below_Click.y + 1, z = Position_Below_Click.z}
+			Node_To_Change = minetest.get_node(Node_To_Change_Position)
+
+							--core.chat_send_all(Node_To_Change.groups.." Arrived at line"..math.random(1000000))
+
+
+			Type_To_Generate = "lategame_amulets:bog_liquid_source"
+			
+			if(math.random(3) <= 1) then
+				Type_To_Generate =  "lategame_amulets:bog_tree_log"
+			end
+			
+			
+
+			if Is_Bog_Type_Placable(Node_To_Change) then
+
+					core.swap_node(Node_To_Change_Position, {name = Type_To_Generate})
+					 timer = core.get_node_timer(Node_To_Change_Position)
+					timer:start(28)
+					
+					
+					--Try to place more
+					Node_To_Change_Position_2 = {x = Position_Below_Click.x, y = Position_Below_Click.y + 2, z = Position_Below_Click.z}
+					if( Is_Bog_Type_Placable(minetest.get_node(Node_To_Change_Position_2))) then
+					core.swap_node(Node_To_Change_Position_2, {name = Type_To_Generate})
+					 timer = core.get_node_timer(Node_To_Change_Position_2)
+					timer:start(25)
+					
+					
+					Node_To_Change_Position_3 = {x = Position_Below_Click.x, y = Position_Below_Click.y + 3, z = Position_Below_Click.z}
+					if(Type_To_Generate ==  "lategame_amulets:bog_liquid_source" and Is_Bog_Type_Placable(minetest.get_node(Node_To_Change_Position_3))) then
+					core.swap_node(Node_To_Change_Position_3, {name = Type_To_Generate})
+					 timer = core.get_node_timer(Node_To_Change_Position_3)
+					timer:start(20)
+					end
+					
+					end
+					
+					
+					
+					
+			end
+
+
+
+		end
+	end,
+	
+})
+
+
+
+function Is_Bog_Type_Placable(Node_To_Change)
+
+if Node_To_Change.name == "air" or Node_To_Change.name == "default:snow" then
+	return true
+end
+
+return false
+
+end
+
+
+
+core.register_node('lategame_amulets:bog_liquid_source', {
+    description = "Bog Source",
+	tiles = {"boom_ore.png"},
+    drawtype = 'liquid',
+	
+	 damage_per_second = 1,
+	 liquid_viscosity = 25,
+	drop = "",
+    drowning = 1,
+	
+	pointable = false,
+    walkable = false,
+    diggable = false,
+    buildable_to = true,
+    is_ground_content = false,
+	
+	
+
+	
+	on_timer = function(pos)
+        core.set_node(pos, { name = "air" })
+        return false
+    end,
+
+})
+
+
+
+
+core.register_node('lategame_amulets:bog_tree_log', {
+    description = "Bog Log",
+	tiles = {"sky_iron.png"},
+
+	drop = "",
+	
+	pointable = true,
+    walkable = true,
+    diggable = false,
+    buildable_to = true,
+    is_ground_content = false,
+	
+	
+	on_timer = function(pos)
+        core.set_node(pos, { name = "air" })
+        return false
+    end,
+
+})
 
 
 
@@ -175,6 +344,35 @@ end
 
 
 --Crafting
+
+
+core.register_craft({
+    type = "shapeless",
+    output = "lategame_amulets:diamond_stick 2",
+    recipe = {
+        "default:diamondblock",
+        "default:diamondblock",
+    },
+})
+
+
+
+
+
+
+core.register_craft({
+	output = "lategame_amulets:hammer_of_yeeting_1",
+	recipe = {
+		{"default:permafrost_with_moss", "tnt:tnt", "default:permafrost_with_moss"},
+		{"", "lategame_amulets:diamond_stick", ""},
+		{"", "lategame_amulets:diamond_stick", ""}
+	}
+})
+
+
+
+
+
 
 
 if minetest.get_modpath("everness") then
@@ -271,7 +469,6 @@ core.register_craft({
     recipe = {
     	"lategame_amulets:steel_amulet",
         "lategame_amulets:steel_amulet_3",
-        "lategame_amulets:steel_amulet",
     },
 })
 
@@ -282,7 +479,6 @@ core.register_craft({
     recipe = {
     	"lategame_amulets:steel_amulet",
         "lategame_amulets:steel_amulet_4",
-        "lategame_amulets:steel_amulet",
     },
 })
 
