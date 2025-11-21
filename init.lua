@@ -23,8 +23,22 @@ https://creativecommons.org/licenses/by-sa/4.0/
 
 
 
+--Set areas enemies will usually not spawn in. For example, to stop them spawning in your base.
+
+Safe_Zones_From_Enemies = { 
+--Duplicate the next line to make multiple safe zones, such as for multiple houses.
+{{x = 0, y = 0, z = 0}, {x = 10, y = 10, z = 10}, "Username", "Main Base"},
+--Pase copies of the line here.
+
+}
+
+
+
+
+
 local daytime_enemies_enabled = minetest.settings:get("daytime_enemies_enabled")
 local enemy_difficulty = minetest.settings:get("enemy_difficulty")
+
 
 
 --Backwards compatibility
@@ -1057,6 +1071,8 @@ core.register_craft({
 --Include smaller structures and decorations for trees and stuff
 
 
+--TODO, Force Floatlands to generate in world and go to the top, add code into the file if its not present. Write directly into the file.
+
 
 end
 
@@ -1202,6 +1218,57 @@ end
 
 
 
+--Original
+--Enemy_Spawnable_Nodes = {"group:cracky", "group:crumbly", "group:oddly_breakable_by_hand", "group:choppy"}
+
+
+Enemy_Spawnable_Nodes = {"group:cracky", "group:crumbly", "group:oddly_breakable_by_hand", "group:choppy"}
+
+
+
+
+
+
+function Is_Position_In_Safe_Zone(Spawn_Position)
+
+	for  i = 1, #Safe_Zones_From_Enemies do
+	
+		--for j = 1, #Safe_Zones_From_Enemies[i] do
+		
+		
+			First_Corner = Safe_Zones_From_Enemies[i][1]
+			Second_Corner = Safe_Zones_From_Enemies[i][2]
+			
+			--Check if the Spawn_Position is between these corners
+			
+			if(
+			(Spawn_Position.x <= First_Corner.x and Spawn_Position.x >= Second_Corner.x) or (Spawn_Position.x <= Second_Corner.x and Spawn_Position.x >= First_Corner.x)
+			and
+			(Spawn_Position.y <= First_Corner.y and Spawn_Position.y >= Second_Corner.y) or (Spawn_Position.y <= Second_Corner.y and Spawn_Position.y >= First_Corner.y)
+			and
+			(Spawn_Position.z <= First_Corner.z and Spawn_Position.z >= Second_Corner.z) or (Spawn_Position.z <= Second_Corner.z and Spawn_Position.z >= First_Corner.z)
+			) then
+				return true
+			end
+			
+		
+		--end
+		
+		
+	end
+
+	return false
+
+end
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1250,6 +1317,7 @@ end)
 
 
 
+
 --[[
 
 Compatible with Mobs Monster. This will change spawn rates and let monsters drop items for crafting amulets.
@@ -1280,7 +1348,7 @@ if minetest.get_modpath("mobs_monster") and minetest.get_modpath("mobs") then
 
 		mobs:spawn({
 				name = "mobs_monster:mese_monster",
-				nodes = {"group:cracky", "group:crumbly", "group:oddly_breakable_by_hand", "group:choppy"},
+				nodes = Enemy_Spawnable_Nodes,
 				max_light = enemy_max_light_spawning,
 				chance = mese_monster_spawn_chance,
 				active_object_count = mese_monster_max_count,
@@ -1288,7 +1356,7 @@ if minetest.get_modpath("mobs_monster") and minetest.get_modpath("mobs") then
 			
 		mobs:spawn({
 			name = "mobs_monster:dungeon_master",
-			nodes = {"group:cracky", "group:crumbly", "group:oddly_breakable_by_hand", "group:choppy"},
+			nodes = Enemy_Spawnable_Nodes,
 			max_light = enemy_max_light_spawning,
 			chance = dungeon_master_spawn_chance,
 			active_object_count = dungeon_master_max_count,
@@ -1304,6 +1372,32 @@ if minetest.get_modpath("mobs_monster") and minetest.get_modpath("mobs") then
 	table.insert(dungeon_master_definition.drops, {name = "lategame_amulets:type_II_artifact", chance = 3, min = 1, max = 2})
 	table.insert(dungeon_master_definition.drops, {name = "lategame_amulets:type_II_artifact", chance = 3, min = 1, max = 1})
 	
+	
+	local default_DM_spawn = dungeon_master_definition.on_spawn
+	
+	
+	
+		--Make sure Dungeon Masters don't spawn in safe zones.
+
+	dungeon_master_definition.on_spawn = function(self)
+		
+				--Check if it spawned in a safe zone. If so, remove the enemy
+		Spawn_Position = self.object:get_pos()
+		
+		if(Is_Position_In_Safe_Zone(Spawn_Position)) then
+		--Destroy the enemy
+		self.object:remove()
+		return
+		end
+			
+		default_DM_spawn(self)
+			
+		
+	end
+	
+	
+	
+	
 	--Mese Monster changes drops on spawn, so need to override method to set drops
 	
 	local mese_monster_definition = minetest.registered_entities["mobs_monster:mese_monster"]	
@@ -1311,6 +1405,19 @@ if minetest.get_modpath("mobs_monster") and minetest.get_modpath("mobs") then
 	local default_mese_spawn = mese_monster_definition.on_spawn
 	
 	mese_monster_definition.on_spawn = function(self)
+	
+	
+	--Check if it spawned in a safe zone. If so, remove the enemy
+	--
+	Spawn_Position = self.object:get_pos()
+	
+	if(Is_Position_In_Safe_Zone(Spawn_Position)) then
+	--Destroy the enemy
+	self.object:remove()
+	return
+	end
+	
+	
 	
 		local result = default_mese_spawn(self)
 		
@@ -1357,6 +1464,10 @@ if minetest.get_modpath("mobs_monster") and minetest.get_modpath("mobs") then
 	end
 
 end
+
+
+
+
 
 
 
