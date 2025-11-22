@@ -27,7 +27,7 @@ https://creativecommons.org/licenses/by-sa/4.0/
 
 Safe_Zones_From_Enemies = { 
 --Duplicate the next line to make multiple safe zones, such as for multiple houses.
-{{x = 0, y = 0, z = 0}, {x = 10, y = 10, z = 10}, "Username", "Main Base"},
+{{x = -16, y = 1398, z = 2778}, {x = 34, y = 1428, z = 2727}, "Comet", "Main Base"},
 --Pase copies of the line here.
 
 }
@@ -716,7 +716,7 @@ core.register_node("lategame_amulets:sky_ore", {
 description = "Sky Ore",
 tiles = {"sky_ore.png"},
 is_ground_content=false,
-groups = {cracky = 2},
+groups = {cracky = 3},
 
 drop = {
         max_items = 4,
@@ -726,8 +726,38 @@ drop = {
             }
         }
     },
+	
+	
+	after_dig_node = function(pos, oldnode, oldmetadata, digger)
+		core.set_node(pos, {name="lategame_amulets:depleted_sky_ore"})
+	end,
 
 })
+
+
+
+core.register_node("lategame_amulets:depleted_sky_ore", {
+description = "Depleted Sky Ore",
+tiles = {"depleted_sky_ore.png"},
+is_ground_content=false,
+groups = {crumbly = 2},
+drop = {max_items = 0,},
+
+on_construct = function(pos, node)
+	Node_Timer = core.get_node_timer(pos)
+	Node_Timer:start(240)
+end,
+
+on_timer = function(pos)
+        core.set_node(pos, { name = "lategame_amulets:sky_ore" })
+        return false
+    end
+
+
+})
+
+
+
 
 
 core.register_node("lategame_amulets:sky_iron", {
@@ -1284,11 +1314,13 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 --]]
 
-local Exosphere_Glass_Layer = 900
+local Exosphere_Glass_Layer_1 = 900
+local Exosphere_Glass_Layer_2 = 9000
+
 
 
 minetest.register_on_generated(function(minp, maxp)
-	if maxp.y >= Exosphere_Glass_Layer and minp.y <= Exosphere_Glass_Layer then
+	if maxp.y >= Exosphere_Glass_Layer_1 and minp.y <= Exosphere_Glass_Layer_1 then
 		local vm, emin, emax = minetest.get_mapgen_object("voxelmanip")
 		local data = vm:get_data()
 		local area = VoxelArea:new({MinEdge=emin, MaxEdge=emax})
@@ -1297,7 +1329,26 @@ minetest.register_on_generated(function(minp, maxp)
 
 		for x = minp.x, maxp.x do
 			for z = minp.z, maxp.z do
-				local p_pos = area:index(x, Exosphere_Glass_Layer, z)
+				local p_pos = area:index(x, Exosphere_Glass_Layer_1, z)
+				data[p_pos] = c_exosphere_glass
+			end
+		end
+
+		vm:set_data(data)
+		vm:calc_lighting()
+		vm:update_liquids()
+		vm:write_to_map()
+		
+	elseif  maxp.y >= Exosphere_Glass_Layer_2 and minp.y <= Exosphere_Glass_Layer_2 then
+		local vm, emin, emax = minetest.get_mapgen_object("voxelmanip")
+		local data = vm:get_data()
+		local area = VoxelArea:new({MinEdge=emin, MaxEdge=emax})
+		
+		local c_exosphere_glass = minetest.get_content_id("default:obsidian_glass")
+
+		for x = minp.x, maxp.x do
+			for z = minp.z, maxp.z do
+				local p_pos = area:index(x, Exosphere_Glass_Layer_2, z)
 				data[p_pos] = c_exosphere_glass
 			end
 		end
@@ -1307,6 +1358,9 @@ minetest.register_on_generated(function(minp, maxp)
 		vm:update_liquids()
 		vm:write_to_map()
 	end
+	
+	
+	
 end)
 
 
