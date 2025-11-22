@@ -93,12 +93,61 @@ core.register_decoration({
         offset = -0.000005,
         scale = 0.00005,
         spread = { x = 15, y = 15, z = 15 },
-        seed = 482,
+        seed = 294,
         octaves = 3,
         persist = 0.6
     },
 
 })
+
+
+
+Desert_Underhang_Placeable_Blocks = {"group:cracky", "group:crumbly", "group:oddly_breakable_by_hand"}
+
+
+
+--Desert_Underhang_Placeable_Blocks = {"default:sand", "default:sandstone", "default:silver_sand", "default:desert_sand", "default:desert_stone", "default:desert_sandstone", "default:dirt_with_dry_grass", "default:dry_dirt_with_dry_grass", "default:dry_dirt"}
+--[[
+if minetest.get_modpath("everness") then
+
+table.insert(Desert_Underhang_Placeable_Blocks, "everness:forsaken_desert_sand")
+table.insert(Desert_Underhang_Placeable_Blocks, "everness:forsaken_desert_stone")
+table.insert(Desert_Underhang_Placeable_Blocks, "everness:coral_sand")
+
+end
+
+if minetest.get_modpath("ethereal") then
+
+end
+--]]
+
+
+core.register_decoration({
+    schematic = My_Path .. "/schematics/Desert_Underhang_1.mts",
+    deco_type = "schematic",
+    place_on = Desert_Underhang_Placeable_Blocks,
+    rotation = "random",
+    flags = 'place_center_x, place_center_z',
+    sidelen = 640,
+    y_max = 31000,
+    y_min = 1000,
+    place_offset_y = -30,
+
+    noise_params = {
+        offset = -0.000005,
+        scale = 0.00005,
+        spread = { x = 15, y = 15, z = 15 },
+        seed = 287,
+        octaves = 3,
+        persist = 0.6
+    },
+
+})
+
+
+
+
+
 
 
 --[[
